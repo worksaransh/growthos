@@ -1,0 +1,27 @@
+{
+  "_comment": "GrowthOS MCP Server — Claude Desktop configuration",
+  "_instructions": "Copy the 'mcpServers' block into your Claude Desktop config file.",
+  "_config_location": {
+    "windows": "%APPDATA%\\Claude\\claude_desktop_config.json",
+    "mac":     "~/Library/Application Support/Claude/claude_desktop_config.json",
+    "linux":   "~/.config/Claude/claude_desktop_config.json"
+  },
+  "mcpServers": {
+    "growthos": {
+      "command": "python",
+      "args": ["D:\\CODE\\OS\\growthos\\mcp\\server.py"],
+      "env": {
+        "BACKEND_URL": "http://localhost:8000",
+        "SUPABASE_URL": "https://pmrmtajstxnjadrhdvmp.supabase.co",
+        "SUPABASE_ANON_KEY": "sb_publishable_Hxf0ckZduk54xhLhiYmsNQ_FD9H9hTC",
+
+        "META_APP_ID": "PASTE_YOUR_META_APP_ID",
+        "META_APP_SECRET": "PASTE_YOUR_META_APP_SECRET",
+
+        "GOOGLE_CLIENT_ID": "PASTE_YOUR_GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET": "PASTE_YOUR_GOOGLE_CLIENT_SECRET",
+        "GOOGLE_DEVELOPER_TOKEN": "PASTE_YOUR_GOOGLE_DEVELOPER_TOKEN"
+      }
+    }
+  }
+}

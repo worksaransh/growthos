@@ -1,0 +1,69 @@
+from fastapi import APIRouter
+from . import (
+    ai_specialist,
+    dashboard,
+    integrations,
+    sync,
+    settings,
+    auth,
+    oauth,
+    products,
+    customers,
+    campaigns,
+    profit,
+    forecast,
+    notifications,
+    automation,
+    crm,
+    reports,
+    api_keys,
+    ai_chat,
+    finance,
+    operations,
+    analytics,
+    audit,
+    billing,
+    attribution,
+    vip,
+    scheduled_reports,
+    webhooks,
+    whatsapp,
+    payments,
+    shipping,
+    seo,
+    meta_capi,
+)
+
+router = APIRouter(prefix="/api/v1")
+router.include_router(dashboard.router)
+router.include_router(integrations.router)
+router.include_router(sync.router)
+router.include_router(settings.router)
+router.include_router(auth.router)
+router.include_router(oauth.router)
+router.include_router(products.router)
+router.include_router(customers.router)
+router.include_router(campaigns.router)
+router.include_router(profit.router)
+router.include_router(forecast.router)
+router.include_router(notifications.router)
+router.include_router(automation.router)
+router.include_router(crm.router)
+router.include_router(reports.router)
+router.include_router(api_keys.router)
+router.include_router(ai_chat.router)
+router.include_router(finance.router)
+router.include_router(operations.router)
+router.include_router(analytics.router)
+router.include_router(audit.router)
+router.include_router(billing.router)
+router.include_router(attribution.router)
+router.include_router(vip.router)
+router.include_router(scheduled_reports.router)
+router.include_router(ai_specialist.router)
+router.include_router(webhooks.router)
+router.include_router(whatsapp.router)
+router.include_router(payments.router)
+router.include_router(shipping.router)
+router.include_router(seo.router)
+router.include_router(meta_capi.router)

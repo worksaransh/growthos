@@ -1,0 +1,86 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+
+# Env files - NEVER commit these
+.env
+.env.local
+.env.production
+.env*.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+coverage/
+.pytest_cache/
+htmlcov/
+
+# Vercel
+.vercel
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Build artifacts
+*.docx
+*.pptx
+!GrowthOS_Master_Development_Prompt.docx
+
+# Misc
+.turbo
+
+# Frontend specific
+frontend/.next/
+frontend/out/
+
+# Backend specific
+backend/.env
+backend/.env.local
+backend/.env.production
+backend/venv/
+
+# Frontend env files
+frontend/.env.local
+frontend/.env.production
+
+# Supabase local dev
+.supabase/
+supabase/.branches
+supabase/.temp
+
+# Vercel output
+.vercel/
