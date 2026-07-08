@@ -84,7 +84,7 @@ export function SecurityPage() {
           </div>
           <div className="bg-surface-container-lowest rounded-lg p-4 border border-outline-variant">
             <div className="text-[10px] font-mono uppercase tracking-wider text-on-surface-variant mb-1">CORS Origins</div>
-            <div className="text-sm text-on-surface font-mono">luxoroffice.com, app.luxoroffice.com</div>
+            <div className="text-sm text-on-surface font-mono">mybrand.co, app.mybrand.co</div>
           </div>
         </div>
         <button className="text-xs px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant hover:text-on-surface transition-colors w-fit">Manage API Settings</button>

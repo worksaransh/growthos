@@ -3,21 +3,21 @@
 import { useState } from "react";
 
 const AUDIT_LOGS = [
-  { ts: "2026-06-30 14:32:01", user: "saransh@luxoroffice.com", action: "Login", resource: "/auth/login", ip: "192.168.1.1", status: "Success" },
-  { ts: "2026-06-30 14:28:47", user: "saransh@luxoroffice.com", action: "Export CSV", resource: "/reports/export", ip: "192.168.1.1", status: "Success" },
-  { ts: "2026-06-30 13:55:12", user: "riya@luxoroffice.com", action: "Settings Changed", resource: "/settings/workspace", ip: "10.0.0.4", status: "Success" },
-  { ts: "2026-06-30 13:41:03", user: "saransh@luxoroffice.com", action: "API Key Created", resource: "/api-keys", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 14:32:01", user: "founder@mybrand.co", action: "Login", resource: "/auth/login", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 14:28:47", user: "founder@mybrand.co", action: "Export CSV", resource: "/reports/export", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 13:55:12", user: "admin@mybrand.co", action: "Settings Changed", resource: "/settings/workspace", ip: "10.0.0.4", status: "Success" },
+  { ts: "2026-06-30 13:41:03", user: "founder@mybrand.co", action: "API Key Created", resource: "/api-keys", ip: "192.168.1.1", status: "Success" },
   { ts: "2026-06-30 13:10:55", user: "unknown@hacker.com", action: "Failed Login", resource: "/auth/login", ip: "45.33.102.7", status: "Failed" },
-  { ts: "2026-06-30 12:48:30", user: "riya@luxoroffice.com", action: "Data Export", resource: "/customers/export", ip: "10.0.0.4", status: "Success" },
-  { ts: "2026-06-30 12:20:11", user: "saransh@luxoroffice.com", action: "Team Invite Sent", resource: "/team/invite", ip: "192.168.1.1", status: "Success" },
-  { ts: "2026-06-30 11:55:00", user: "admin@luxoroffice.com", action: "Role Changed", resource: "/team/roles", ip: "192.168.1.5", status: "Success" },
-  { ts: "2026-06-30 11:30:42", user: "saransh@luxoroffice.com", action: "Integration Connected", resource: "/integrations/meta", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 12:48:30", user: "admin@mybrand.co", action: "Data Export", resource: "/customers/export", ip: "10.0.0.4", status: "Success" },
+  { ts: "2026-06-30 12:20:11", user: "founder@mybrand.co", action: "Team Invite Sent", resource: "/team/invite", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 11:55:00", user: "admin@mybrand.co", action: "Role Changed", resource: "/team/roles", ip: "192.168.1.5", status: "Success" },
+  { ts: "2026-06-30 11:30:42", user: "founder@mybrand.co", action: "Integration Connected", resource: "/integrations/meta", ip: "192.168.1.1", status: "Success" },
   { ts: "2026-06-30 10:58:17", user: "unknown@attacker.net", action: "Failed Login", resource: "/auth/login", ip: "185.220.101.9", status: "Failed" },
-  { ts: "2026-06-30 10:22:09", user: "riya@luxoroffice.com", action: "Report Generated", resource: "/reports/monthly", ip: "10.0.0.4", status: "Success" },
-  { ts: "2026-06-30 09:45:33", user: "saransh@luxoroffice.com", action: "API Key Deleted", resource: "/api-keys/key_4821", ip: "192.168.1.1", status: "Success" },
-  { ts: "2026-06-30 09:12:05", user: "saransh@luxoroffice.com", action: "Billing Updated", resource: "/billing/plan", ip: "192.168.1.1", status: "Success" },
-  { ts: "2026-06-30 08:55:48", user: "admin@luxoroffice.com", action: "Workspace Settings", resource: "/settings/workspace", ip: "192.168.1.5", status: "Success" },
-  { ts: "2026-06-30 08:30:22", user: "riya@luxoroffice.com", action: "Login", resource: "/auth/login", ip: "10.0.0.4", status: "Success" },
+  { ts: "2026-06-30 10:22:09", user: "admin@mybrand.co", action: "Report Generated", resource: "/reports/monthly", ip: "10.0.0.4", status: "Success" },
+  { ts: "2026-06-30 09:45:33", user: "founder@mybrand.co", action: "API Key Deleted", resource: "/api-keys/key_4821", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 09:12:05", user: "founder@mybrand.co", action: "Billing Updated", resource: "/billing/plan", ip: "192.168.1.1", status: "Success" },
+  { ts: "2026-06-30 08:55:48", user: "admin@mybrand.co", action: "Workspace Settings", resource: "/settings/workspace", ip: "192.168.1.5", status: "Success" },
+  { ts: "2026-06-30 08:30:22", user: "admin@mybrand.co", action: "Login", resource: "/auth/login", ip: "10.0.0.4", status: "Success" },
 ];
 
 const KPI_CHIPS = [
@@ -117,7 +117,7 @@ export function AuditLogsPage() {
                   <tr key={`exp-${i}`} className="bg-surface-container-lowest">
                     <td colSpan={6} className="px-5 py-4">
                       <div className="font-mono text-xs text-on-surface-variant bg-surface-container rounded-lg p-4">
-                        <pre>{JSON.stringify({ timestamp: log.ts, user: log.user, action: log.action, resource: log.resource, ip_address: log.ip, status: log.status, user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0", session_id: `sess_${Math.random().toString(36).slice(2, 10)}`, workspace_id: "ws_luxoroffice_001" }, null, 2)}</pre>
+                        <pre>{JSON.stringify({ timestamp: log.ts, user: log.user, action: log.action, resource: log.resource, ip_address: log.ip, status: log.status, user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Chrome/126.0", session_id: `sess_${Math.random().toString(36).slice(2, 10)}`, workspace_id: "ws_mybrand_001" }, null, 2)}</pre>
                       </div>
                     </td>
                   </tr>

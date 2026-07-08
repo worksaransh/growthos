@@ -19,9 +19,9 @@ const REPORT_CARDS = [
 ];
 
 const SCHEDULED_REPORTS = [
-  { name: "Weekly Performance", frequency: "Every Monday 8:00 AM", recipients: "saransh@luxoroffice.com, riya@luxoroffice.com", nextRun: "Jul 7, 2026", status: "Active" },
-  { name: "Monthly Business Review", frequency: "1st of month", recipients: "founders@luxoroffice.com", nextRun: "Aug 1, 2026", status: "Active" },
-  { name: "Daily Ad Spend Alert", frequency: "Daily 9:00 AM", recipients: "saransh@luxoroffice.com", nextRun: "Jul 1, 2026", status: "Paused" },
+  { name: "Weekly Performance", frequency: "Every Monday 8:00 AM", recipients: "founder@mybrand.co, admin@mybrand.co", nextRun: "Jul 7, 2026", status: "Active" },
+  { name: "Monthly Business Review", frequency: "1st of month", recipients: "team@mybrand.co", nextRun: "Aug 1, 2026", status: "Active" },
+  { name: "Daily Ad Spend Alert", frequency: "Daily 9:00 AM", recipients: "founder@mybrand.co", nextRun: "Jul 1, 2026", status: "Paused" },
 ];
 
 const RECENT_EXPORTS = [

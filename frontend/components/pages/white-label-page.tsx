@@ -3,11 +3,11 @@
 import { useState } from "react";
 
 export function WhiteLabelPage() {
-  const [brandName, setBrandName] = useState("LuxorOS");
+  const [brandName, setBrandName] = useState("GrowthOS");
   const [primaryColor, setPrimaryColor] = useState("#3B9EFF");
-  const [customDomain, setCustomDomain] = useState("analytics.luxoroffice.com");
-  const [senderName, setSenderName] = useState("LuxorOS Reports");
-  const [fromEmail, setFromEmail] = useState("reports@luxoroffice.com");
+  const [customDomain, setCustomDomain] = useState("analytics.mybrand.co");
+  const [senderName, setSenderName] = useState("GrowthOS Reports");
+  const [fromEmail, setFromEmail] = useState("reports@mybrand.co");
   const [removeBranding, setRemoveBranding] = useState(false);
   const [saved, setSaved] = useState(false);
 

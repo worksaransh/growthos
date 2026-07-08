@@ -372,9 +372,6 @@ async def update_commerce_account(
     updates = body.model_dump(exclude_none=True)
     if not updates:
         return {"message": "Nothing to update"}
-    updates = body.model_dump(exclude_none=True)
-    if not updates:
-        return {"message": "Nothing to update"}
 
     cols = list(updates.keys())
     vals = list(updates.values())

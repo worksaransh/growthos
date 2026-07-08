@@ -529,7 +529,7 @@ function SecurityTab() {
           {[
             { event: "Login", detail: "Chrome · Mumbai", time: "2 minutes ago", icon: "login" },
             { event: "Settings saved", detail: "Workspace name updated", time: "1 hour ago", icon: "settings" },
-            { event: "Team invite sent", detail: "ananya@luxoroffice.com", time: "3 hours ago", icon: "person_add" },
+            { event: "Team invite sent", detail: "team@mybrand.co", time: "3 hours ago", icon: "person_add" },
             { event: "Integration connected", detail: "Meta Ads connected", time: "Yesterday", icon: "link" },
           ].map((log, i) => (
             <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-white/[0.03]">

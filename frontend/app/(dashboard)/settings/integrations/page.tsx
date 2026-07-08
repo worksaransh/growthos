@@ -289,7 +289,7 @@ function ShopifyPanel({
   onRefresh: () => void;
 }) {
   const [storeUrl, setStoreUrl] = useState(
-    (initial.store_url as string) ?? "parkerpensindia.myshopify.com"
+    (initial.store_url as string) ?? "yourstore.myshopify.com"
   );
   const [accessToken, setAccessToken] = useState("");
   const [apiKey, setApiKey] = useState("");
