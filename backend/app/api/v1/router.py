@@ -32,6 +32,17 @@ from . import (
     shipping,
     seo,
     meta_capi,
+    razorpay_int,
+    woocommerce,
+    tiktok_ads,
+    snapchat_ads,
+    bing_ads,
+    klaviyo,
+    # Enterprise multi-tenant
+    organizations,
+    commerce,
+    channels,
+    superadmin,
 )
 
 router = APIRouter(prefix="/api/v1")
@@ -67,3 +78,14 @@ router.include_router(payments.router)
 router.include_router(shipping.router)
 router.include_router(seo.router)
 router.include_router(meta_capi.router)
+router.include_router(razorpay_int.router)
+router.include_router(woocommerce.router)
+router.include_router(tiktok_ads.router)
+router.include_router(snapchat_ads.router)
+router.include_router(bing_ads.router)
+router.include_router(klaviyo.router)
+# Enterprise multi-tenant hierarchy
+router.include_router(organizations.router)
+router.include_router(commerce.router)
+router.include_router(channels.router)
+router.include_router(superadmin.router)

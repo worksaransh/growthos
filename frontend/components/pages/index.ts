@@ -34,3 +34,5 @@ export { ForecastAiPage } from "./forecast-ai-page";
 export { AlertsPage } from "./alerts-page";
 export { IntegrationsPage } from "./integrations-page";
 export { WorkflowBuilderPage } from "./workflow-builder-page";
+export { SettingsPage } from "./settings-page";
+export { FeaturesDocsPage } from "./features-docs-page";

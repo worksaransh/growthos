@@ -5,10 +5,22 @@ from .config import settings
 pool: asyncpg.Pool | None = None
 DB_AVAILABLE: bool = False
 
+_PLACEHOLDER_MARKERS = ("", "PASTE_DATABASE_URL_HERE", "YOUR_DB_PASSWORD")
+
+
+def _is_placeholder_url(url: str) -> bool:
+    """Return True if the DATABASE_URL is unset or still contains a placeholder."""
+    if not url:
+        return True
+    for marker in _PLACEHOLDER_MARKERS:
+        if marker and marker in url:
+            return True
+    return False
+
 
 async def create_pool() -> asyncpg.Pool | None:
     global pool, DB_AVAILABLE
-    if not settings.database_url or settings.database_url in ("", "PASTE_DATABASE_URL_HERE"):
+    if _is_placeholder_url(settings.database_url):
         logger.warning("⚠️  DATABASE_URL not set — running in demo mode (no DB). Set it in backend/.env to enable full functionality.")
         DB_AVAILABLE = False
         return None

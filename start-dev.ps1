@@ -23,7 +23,7 @@ if ($missingVars.Count -gt 0) {
         Write-Host "  - $v" -ForegroundColor Red
     }
     Write-Host ""
-    Write-Host "Get them from: supabase.com -> zorivxsbpxlpumhlpwwg -> Settings -> API" -ForegroundColor DarkGray
+    Write-Host "Get them from: supabase.com -> pmrmtajstxnjadrhdvmp -> Settings -> API" -ForegroundColor DarkGray
     Write-Host ""
 } else {
     Write-Host "OK: Supabase credentials configured" -ForegroundColor Green
@@ -46,6 +46,6 @@ Write-Host "  API      -> http://localhost:8000" -ForegroundColor White
 Write-Host "  API Docs -> http://localhost:8000/docs" -ForegroundColor White
 Write-Host "  Health   -> http://localhost:8000/health" -ForegroundColor White
 Write-Host ""
-Write-Host "  Login: demo@growthos.ai / demo123456" -ForegroundColor Yellow
+Write-Host "  Sign up at http://localhost:3000/signup or login" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "To stop: close the two terminal windows" -ForegroundColor DarkGray

@@ -113,18 +113,17 @@ async def send_capi_event(
     pixel_id = META_PIXEL_ID
     token = META_CAPI_TOKEN
 
-    if not (pixel_id and token):
-        # Try workspace-specific credentials
+    if not pixel_id:
+        # Try workspace-specific pixel ID from api_credentials table
         row = await fetchrow("""
-            SELECT credentials FROM integrations
-            WHERE workspace_id = $1 AND platform = 'meta' AND status = 'active'
+            SELECT meta_pixel_id FROM api_credentials
+            WHERE workspace_id = $1 AND platform = 'meta' AND is_active = true
             LIMIT 1
         """, workspace_id)
-        if row and row["credentials"]:
-            import json as _json
-            creds = _json.loads(row["credentials"]) if isinstance(row["credentials"], str) else row["credentials"]
-            pixel_id = creds.get("pixel_id", "")
-            token = creds.get("capi_token", "")
+        if row and row["meta_pixel_id"]:
+            pixel_id = row["meta_pixel_id"]
+        # Note: CAPI access token must be set via META_CAPI_ACCESS_TOKEN env var
+        # (different from App Secret — generate in Meta Events Manager → Settings)
 
     if not (pixel_id and token):
         return {

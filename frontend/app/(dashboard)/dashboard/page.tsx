@@ -7,6 +7,7 @@ import { CommandPalette } from "@/components/shared/command-palette";
 import { NotificationCenter } from "@/components/shared/notification-center";
 import { LiveOrderTicker } from "@/components/shared/live-ticker";
 import { PageVisualIntro, VisualEmptyState, VisualSkeletonGrid } from "@/components/shared/visual-system";
+import { AppIcon } from "@/components/shared/app-icon";
 import { KPICard } from "@/components/kpi/kpi-card";
 import { RevenueChart } from "@/components/charts/revenue-chart";
 import { ChannelBreakdown } from "@/components/charts/channel-breakdown";
@@ -72,6 +73,8 @@ import {
   WhiteLabelPage,
   IntegrationsPage,
   WorkflowBuilderPage,
+  SettingsPage,
+  FeaturesDocsPage,
 } from "@/components/pages";
 
 const PLATFORM_DETAILS = {
@@ -255,6 +258,7 @@ function DashboardContent() {
           {page === "security" && <SecurityPage />}
           {page === "white-label" && <WhiteLabelPage />}
           {page === "workflow-builder" && <WorkflowBuilderPage />}
+          {page === "features-docs" && <FeaturesDocsPage onNav={(id) => setPage(id)} />}
           </div>
         </div>
       </div>
@@ -339,12 +343,24 @@ function OverviewPage({
             </div>
             <span className="badge-success text-xs px-2.5 py-1 rounded-full">{ordersCount.toLocaleString()} orders</span>
           </div>
-          <OrdersTable orders={recentOrders && recentOrders.length > 0 ? recentOrders : MOCK_DATA.orders} />
+          <OrdersTable orders={recentOrders || []} />
         </div>
       </div>
     </div>
   );
 }
+
+const getGradientForName = (name: string) => {
+  const hash = name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const gradients = [
+    "linear-gradient(135deg, #c0c1ff 0%, #ddb7ff 100%)",
+    "linear-gradient(135deg, #7bd0ff 0%, #c0c1ff 100%)",
+    "linear-gradient(135deg, #ddb7ff 0%, #7bd0ff 100%)",
+    "linear-gradient(135deg, #4ade80 0%, #7bd0ff 100%)",
+    "linear-gradient(135deg, #fb923c 0%, #ddb7ff 100%)",
+  ];
+  return gradients[hash % gradients.length];
+};
 
 // ─── CLIENTS PAGE ──────────────────────────────────────────────────
 function ClientsPage() {
@@ -353,15 +369,20 @@ function ClientsPage() {
     <div className="p-7">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
-          { l: "Total Brands", v: "6", sub: "2 agencies" },
-          { l: "Combined Rev.", v: "₹2.0Cr", sub: "Last 30 days" },
-          { l: "Avg ROAS", v: "3.7x", sub: "Across clients" },
-          { l: "Total Orders", v: "7,487", sub: "This month" },
+          { l: "Total Brands", v: "6", sub: "2 agencies", icon: "store" },
+          { l: "Combined Rev.", v: "₹2.0Cr", sub: "Last 30 days", icon: "payments" },
+          { l: "Avg ROAS", v: "3.7x", sub: "Across clients", icon: "trending_up" },
+          { l: "Total Orders", v: "7,487", sub: "This month", icon: "package" },
         ].map((s, i) => (
-          <div key={i} className="glass-card p-4">
-            <div className="text-[10px] text-on-surface-variant/50 font-mono uppercase tracking-wider mb-2">{s.l}</div>
-            <div className="font-mono text-[22px] text-on-surface font-medium">{s.v}</div>
-            <div className="text-[11px] text-on-surface-variant/50 mt-1">{s.sub}</div>
+          <div key={i} className="glass-card p-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-[10px] text-on-surface-variant/50 font-mono uppercase tracking-wider">{s.l}</div>
+              <div className="w-7 h-7 rounded-lg glass-card-high flex items-center justify-center">
+                <AppIcon name={s.icon} size={15} className="text-primary" />
+              </div>
+            </div>
+            <div className="font-mono text-[22px] text-on-surface font-medium leading-none mb-1.5">{s.v}</div>
+            <div className="text-[11px] text-on-surface-variant/50">{s.sub}</div>
           </div>
         ))}
       </div>
@@ -373,9 +394,14 @@ function ClientsPage() {
           ))}
         </div>
         {d.clients.map((c, i) => (
-          <div key={i} className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_0.8fr_0.8fr] p-3.5 px-5 gap-3 hover:bg-surface-container-high/30 transition-colors cursor-pointer border-b border-outline-variant/10 last:border-0">
+          <div key={i} className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_0.8fr_0.8fr] p-3.5 px-5 gap-3 hover:bg-surface-container-high/30 transition-colors cursor-pointer border-b border-outline-variant/10 last:border-0 items-center">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-surface-container-lowest border border-outline-variant/20 flex items-center justify-center text-xs text-on-surface-variant">{c.name[0]}</div>
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-[#0b1326] uppercase flex-shrink-0"
+                style={{ background: getGradientForName(c.name) }}
+              >
+                {c.name[0]}
+              </div>
               <span className="text-sm text-on-surface font-medium">{c.name}</span>
             </div>
             <span className="font-mono text-sm text-on-surface">{c.revenue}</span>
@@ -538,232 +564,6 @@ function LegacyIntegrationsPage({
           </div>
         </div>
       </Modal>
-    </div>
-  );
-}
-
-// ─── SETTINGS PAGE ─────────────────────────────────────────────────
-function SettingsPage() {
-  const [tab, setTab] = useState("workspace");
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  const { data: workspace } = useQuery({
-    queryKey: ["settings", "workspace"],
-    queryFn: () => api.getWorkspace(),
-  });
-
-  const { data: teamMembers } = useQuery({
-    queryKey: ["settings", "team"],
-    queryFn: () => api.getTeamMembers(),
-    enabled: tab === "team",
-  });
-
-  const updateWorkspaceMutation = useMutation({
-    mutationFn: (data: Partial<WorkspaceResponse>) => api.updateWorkspace(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["settings", "workspace"] });
-      toast({ type: "success", title: "Settings saved" });
-    },
-    onError: (err: any) => toast({ type: "error", title: "Failed to save", message: err.message }),
-  });
-
-  const [brandName, setBrandName] = useState("");
-  const [timezone, setTimezone] = useState("Asia/Kolkata");
-  const [currency, setCurrency] = useState("INR");
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState("member");
-  const [showInviteModal, setShowInviteModal] = useState(false);
-
-  useEffect(() => {
-    if (workspace) {
-      setBrandName(workspace.brand_name || "");
-      setTimezone(workspace.timezone || "Asia/Kolkata");
-      setCurrency(workspace.currency || "INR");
-    }
-  }, [workspace]);
-
-  const handleSave = () => {
-    updateWorkspaceMutation.mutate({ brand_name: brandName, timezone, currency });
-  };
-
-  const inviteMutation = useMutation({
-    mutationFn: () => api.inviteTeamMember(inviteEmail, inviteRole),
-    onSuccess: () => {
-      toast({ type: "success", title: "Invitation sent", message: `Invite sent to ${inviteEmail}` });
-      setShowInviteModal(false);
-      setInviteEmail("");
-      queryClient.invalidateQueries({ queryKey: ["settings", "team"] });
-    },
-    onError: (err: any) => toast({ type: "error", title: "Failed to invite", message: err.message }),
-  });
-
-  const removeMemberMutation = useMutation({
-    mutationFn: (id: string) => api.removeTeamMember(id),
-    onSuccess: () => {
-      toast({ type: "success", title: "Member removed" });
-      queryClient.invalidateQueries({ queryKey: ["settings", "team"] });
-    },
-    onError: (err: any) => toast({ type: "error", title: "Failed to remove member", message: err.message }),
-  });
-
-  const TABS = ["workspace", "profile", "team", "notifications"];
-
-  return (
-    <div className="p-7 flex gap-6">
-      <div className="w-[180px] flex-shrink-0">
-        <nav className="flex flex-col gap-0.5">
-          {TABS.map((s) => (
-            <button key={s} onClick={() => setTab(s)}
-              className={`px-3 py-2 rounded-lg text-left text-sm border-l-2 transition-all ${tab === s
-                ? "bg-primary/8 text-primary border-primary"
-                : "text-on-surface-variant hover:bg-surface-container-high/50 border-transparent"
-              }`}>
-              {s.charAt(0).toUpperCase() + s.slice(1)}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      <div className="flex-1 flex flex-col gap-4">
-        {tab === "workspace" && (
-          <div className="glass-card p-5 flex flex-col gap-4">
-            <h3 className="font-inter text-sm font-bold text-on-surface">Workspace Settings</h3>
-            <div className="flex flex-col gap-3">
-              <div>
-                <label className="block text-xs font-mono text-on-surface-variant/50 uppercase mb-1.5">Brand Name</label>
-                <Input value={brandName} onChange={(e) => setBrandName(e.target.value)} className="bg-surface-container-lowest border-outline-variant/20 text-on-surface" />
-              </div>
-              <div>
-                <label className="block text-xs font-mono text-on-surface-variant/50 uppercase mb-1.5">Timezone</label>
-                <Input value={timezone} onChange={(e) => setTimezone(e.target.value)} className="bg-surface-container-lowest border-outline-variant/20 text-on-surface" />
-              </div>
-              <div>
-                <label className="block text-xs font-mono text-on-surface-variant/50 uppercase mb-1.5">Currency</label>
-                <Input value={currency} onChange={(e) => setCurrency(e.target.value)} className="bg-surface-container-lowest border-outline-variant/20 text-on-surface" />
-              </div>
-            </div>
-            <div className="flex gap-2.5 mt-2">
-              <Button onClick={handleSave} disabled={updateWorkspaceMutation.isPending}>
-                {updateWorkspaceMutation.isPending ? "Saving..." : "Save Changes"}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {tab === "profile" && (
-          <div className="glass-card p-5 flex flex-col gap-4">
-            <h3 className="font-inter text-sm font-bold text-on-surface">Profile Settings</h3>
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-surface-container-lowest">
-              <div className="w-14 h-14 rounded-full primary-gradient inner-glow flex items-center justify-center text-white text-xl font-bold">
-                S
-              </div>
-              <div>
-                <div className="text-sm text-on-surface font-medium">Saransh Gulati</div>
-                <div className="text-xs text-on-surface-variant/50 font-mono">saransh.gulati@luxoroffice.com</div>
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <div>
-                <label className="block text-xs font-mono text-on-surface-variant/50 uppercase mb-1.5">Full Name</label>
-                <Input defaultValue="Saransh Gulati" className="bg-surface-container-lowest border-outline-variant/20 text-on-surface" />
-              </div>
-              <div>
-                <label className="block text-xs font-mono text-on-surface-variant/50 uppercase mb-1.5">Email</label>
-                <Input defaultValue="saransh.gulati@luxoroffice.com" disabled className="bg-surface-container-lowest border-outline-variant/20 text-on-surface-variant/40 cursor-not-allowed" />
-              </div>
-            </div>
-            <Button onClick={() => toast({ type: "success", title: "Profile updated" })}>Save Profile</Button>
-          </div>
-        )}
-
-        {tab === "team" && (
-          <div className="glass-card p-5 flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <h3 className="font-inter text-sm font-bold text-on-surface">Team Members</h3>
-              <Button onClick={() => setShowInviteModal(true)} className="text-xs">+ Invite Member</Button>
-            </div>
-            <div className="flex flex-col gap-1">
-              {(teamMembers && teamMembers.length > 0 ? teamMembers : [
-                { id: "1", name: "Saransh Gulati", email: "saransh@luxoroffice.com", role: "owner" },
-                { id: "2", name: "Riya Sharma", email: "riya@luxoroffice.com", role: "member" },
-              ]).map((m: any) => (
-                <div key={m.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-lowest transition-colors">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-full bg-surface-container-high/30 border border-outline-variant/20 flex items-center justify-center text-xs text-on-surface-variant">
-                      {m.name?.[0] || m.email?.[0] || "?"}
-                    </div>
-                    <div>
-                      <div className="text-xs text-on-surface">{m.name || m.email}</div>
-                      <div className="text-[10px] text-on-surface-variant/50 font-mono">{m.email}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-[10px] text-on-surface-variant capitalize">{m.role}</span>
-                    {m.role !== "owner" && (
-                      <button onClick={() => removeMemberMutation.mutate(m.id)}
-                        className="text-[10px] font-mono text-on-surface-variant/50 hover:text-error transition-colors">
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <Modal open={showInviteModal} onClose={() => setShowInviteModal(false)} title="Invite Team Member">
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="block text-[10px] font-mono text-on-surface-variant/50 uppercase tracking-wider mb-1.5">Email Address</label>
-                  <Input value={inviteEmail} onChange={e => setInviteEmail(e.target.value)}
-                    placeholder="colleague@brand.in" className="bg-surface-container-lowest border-outline-variant/20 text-on-surface" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-mono text-on-surface-variant/50 uppercase tracking-wider mb-1.5">Role</label>
-                  <select value={inviteRole} onChange={e => setInviteRole(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-surface-container-lowest border border-outline-variant/20 text-on-surface text-sm font-mono outline-none focus:border-primary transition-colors">
-                    <option value="member">Member</option>
-                    <option value="admin">Admin</option>
-                    <option value="viewer">Viewer</option>
-                  </select>
-                </div>
-                <div className="flex gap-2">
-                  <Button onClick={() => inviteMutation.mutate()} disabled={inviteMutation.isPending} className="flex-1">
-                    {inviteMutation.isPending ? "Sending…" : "Send Invite"}
-                  </Button>
-                  <Button onClick={() => setShowInviteModal(false)} className="flex-1 bg-transparent border border-outline-variant/20 text-on-surface-variant hover:text-on-surface">
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </Modal>
-          </div>
-        )}
-
-        {tab === "notifications" && (
-          <div className="glass-card p-5 flex flex-col gap-4">
-            <h3 className="font-inter text-sm font-bold text-on-surface">Notification Preferences</h3>
-            {[
-              { label: "ROAS Alerts", desc: "Get notified when ROAS drops below target" },
-              { label: "Spend Alerts", desc: "Alert when daily spend exceeds budget" },
-              { label: "Order Spikes", desc: "Notify on unusual order volume changes" },
-              { label: "Weekly Summary", desc: "Weekly performance digest every Monday" },
-            ].map((pref, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b border-outline-variant/10 last:border-0">
-                <div>
-                  <div className="text-sm text-on-surface">{pref.label}</div>
-                  <div className="text-xs text-on-surface-variant/50 font-mono mt-0.5">{pref.desc}</div>
-                </div>
-                <button
-                  onClick={() => toast({ type: "success", title: `${pref.label} preference updated` })}
-                  className="px-3 py-1 rounded-lg text-xs font-mono bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
-                >
-                  Enabled
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }

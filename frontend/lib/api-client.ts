@@ -325,7 +325,47 @@ class ApiClient {
     return this.request('/api/v1/meta-capi/status')
   }
 
+  // ── Super Admin ────────────────────────────────────────────────────────────
+  async getSuperAdminOverview(): Promise<any> {
+    return this.request('/api/v1/superadmin/overview')
+  }
+  async getSuperAdminOrgs(limit = 50, offset = 0): Promise<any[]> {
+    return this.request(`/api/v1/superadmin/organizations?limit=${limit}&offset=${offset}`)
+  }
+  async getSuperAdminUsers(limit = 50, offset = 0, search?: string): Promise<any[]> {
+    const p = new URLSearchParams({ limit: String(limit), offset: String(offset) })
+    if (search) p.set('search', search)
+    return this.request(`/api/v1/superadmin/users?${p}`)
+  }
+  async grantPlan(orgId: string, planName: string, notes?: string): Promise<any> {
+    return this.request('/api/v1/superadmin/grant-plan', {
+      method: 'POST',
+      body: JSON.stringify({ org_id: orgId, plan_name: planName, notes }),
+    })
+  }
+  async setBrandAllocation(orgId: string, maxBrands: number, notes?: string): Promise<any> {
+    return this.request('/api/v1/superadmin/brand-allocation', {
+      method: 'POST',
+      body: JSON.stringify({ org_id: orgId, max_brands: maxBrands, notes }),
+    })
+  }
+
+  async getSuperAdminAdmins(): Promise<any[]> {
+    return this.request('/api/v1/superadmin/admins')
+  }
+  async addPlatformAdmin(userEmail: string, role: string, notes?: string): Promise<any> {
+    return this.request('/api/v1/superadmin/admins', {
+      method: 'POST',
+      body: JSON.stringify({ user_email: userEmail, role, notes }),
+    })
+  }
+
+  // -- Upgrade / Plans -------------------------------------------------------
+  async getBillingPlans(): Promise<any[]> {
+    return this.request('/api/v1/billing/plans')
+  }
 }
+
 export class ApiError extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -353,23 +393,34 @@ export interface IntegrationResponse {
   id: string;
   platform: string;
   status: string;
-  account_name: string;
   last_synced_at: string | null;
-  sync_cursor: string | null;
+  platform_account_name: string | null;
+}
+
+
+export interface WorkspaceResponse {
+  id: string;
+  brand_name: string;
+  user_id: string;
+  shopify_domain: string | null;
+  industry: string | null;
+  website: string | null;
+  currency: string | null;
+  timezone: string | null;
+  logo_url: string | null;
+  settings: Record<string, any>;
+  created_at: string;
 }
 
 export interface SyncStatusResponse {
   platform: string;
   status: string;
   last_synced_at: string | null;
-  records_synced: number;
+  records_synced: number | null;
 }
 
-export interface WorkspaceResponse {
-  id: string;
-  brand_name: string;
-  timezone: string;
-  currency: string;
-}
-
-export const api = new ApiClient(BACKEND_URL);
+export const api = new ApiClient(
+  typeof window !== "undefined"
+    ? process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"
+    : process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"
+);

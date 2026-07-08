@@ -2,6 +2,9 @@
 
 import { useGrowthOS, useUnreadCount } from "@/lib/store";
 import { DateRangeFilter } from "./date-range-filter";
+import { ThemeToggle } from "./theme-toggle";
+import { WorkspaceSwitcher } from "./workspace-switcher";
+import { CommerceSwitcher } from "./commerce-switcher";
 import type { DatePreset } from "@/lib/hooks";
 import { AppIcon } from "./app-icon";
 
@@ -52,6 +55,7 @@ const PAGE_META: Record<string, { title: string; icon: string; desc?: string }> 
   security:            { title: "Security",            icon: "security",           desc: "2FA · Permissions · Access control" },
   "audit-logs":        { title: "Audit Logs",          icon: "manage_search",      desc: "Activity · Audit trail · Compliance" },
   "white-label":       { title: "White Label",         icon: "palette",            desc: "Branding · Custom domain · Styling" },
+  "features-docs":     { title: "Feature Docs",        icon: "menu_book",          desc: "All 38 modules · Features · Benefits · USP" },
 };
 
 const NO_DATE_FILTER_PAGES = ["founder-ai", "settings", "notifications", "integrations", "crm", "automation"];
@@ -106,6 +110,12 @@ export function TopBar({ page, dateRange, onDateChange, onSearchOpen, unreadNoti
 
       {/* ── Right: actions ──────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Context switchers (hidden on small screens) */}
+        <div className="hidden lg:flex items-center gap-1.5">
+          <WorkspaceSwitcher />
+          <CommerceSwitcher />
+        </div>
+        <div className="hidden lg:block w-px h-5 bg-outline-variant/20" />
         {/* Notification bell */}
         <button
           onClick={() => setNotificationsOpen(!ui.notificationsOpen)}
@@ -119,6 +129,9 @@ export function TopBar({ page, dateRange, onDateChange, onSearchOpen, unreadNoti
             </span>
           )}
         </button>
+
+        {/* Theme toggle */}
+        <ThemeToggle />
 
         {/* Date range filter */}
         {showDateFilter && (

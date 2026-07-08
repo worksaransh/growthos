@@ -1,6 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/hooks";
+import { useIsAdmin } from "@/lib/hooks/use-admin";
+import { useIsPlatformAdmin } from "@/lib/hooks/use-platform-admin";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 import { AppIcon } from "./app-icon";
@@ -89,8 +93,18 @@ const NAV_SECTIONS: NavSection[] = [
       { id: "audit-logs",    label: "Audit Logs",    icon: "manage_search" },
       { id: "white-label",   label: "White Label",   icon: "palette" },
       { id: "settings",      label: "Settings",      icon: "settings" },
+      { id: "features-docs", label: "Feature Docs",  icon: "menu_book" },
     ],
   },
+];
+
+// Admin links — rendered as <Link> instead of buttons
+const ADMIN_LINKS: { href: string; label: string; icon: string; platformOnly?: boolean }[] = [
+  { href: "/admin",              label: "Admin Dashboard", icon: "workspace_premium" },
+  { href: "/admin/users",        label: "Users",           icon: "group" },
+  { href: "/admin/workspaces",   label: "Workspaces",      icon: "store" },
+  { href: "/admin/case-studies", label: "Case Studies",    icon: "verified" },
+  { href: "/superadmin",         label: "Super Admin",     icon: "admin_panel_settings", platformOnly: true },
 ];
 
 interface SidebarProps {
@@ -103,6 +117,9 @@ interface SidebarProps {
 
 export function Sidebar({ active, onNav, unreadNotifications = 0, isOpen, onClose }: SidebarProps) {
   const { user, signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
+  const isPlatformAdmin = useIsPlatformAdmin();
+  const pathname = usePathname();
 
   const { data: workspace } = useQuery({
     queryKey: ["settings", "workspace"],
@@ -213,6 +230,39 @@ export function Sidebar({ active, onNav, unreadNotifications = 0, isOpen, onClos
               })}
             </div>
           ))}
+          {/* ── Admin section ──────────────────────────────────────────────── */}
+          {isAdmin && (
+            <div className="mt-3">
+              <div className="px-3 py-1.5">
+                <span className="text-tiny-tracking text-[#ddb7ff]/50 uppercase tracking-widest font-label-sm">Admin</span>
+              </div>
+              {ADMIN_LINKS.filter(link => !('platformOnly' in link && link.platformOnly) || isPlatformAdmin).map((link) => {
+                const isAdminActive = pathname === link.href || (link.href !== "/admin" && pathname.startsWith(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-left transition-all duration-150 text-sm ${
+                      isAdminActive ? "nav-active" : "nav-item"
+                    }`}
+                  >
+                    <AppIcon
+                      name={link.icon}
+                      className={isAdminActive ? "text-primary" : "text-[#ddb7ff]/70"}
+                      size={19}
+                      strokeWidth={1.8}
+                    />
+                    <span className={`flex-1 font-label-md text-[13px] ${isAdminActive ? "text-primary font-semibold" : ""}`}>
+                      {link.label}
+                    </span>
+                    {!isAdminActive && (
+                      <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded bg-[#ddb7ff]/10 text-[#ddb7ff]/60">SA</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </nav>
 
         {/* ── Upgrade CTA ─────────────────────────────────────────────────── */}
@@ -227,7 +277,7 @@ export function Sidebar({ active, onNav, unreadNotifications = 0, isOpen, onClos
             </div>
           </div>
 
-          {/* ── User profile ───────────────────────────────────────────────── */}
+          {/* ── User profile ────────────────────────────────────────────── */}
           <div className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-surface-container-high/30 transition-all cursor-pointer group">
             <div className="w-8 h-8 rounded-full primary-gradient inner-glow flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
               {userInitial}
@@ -241,7 +291,7 @@ export function Sidebar({ active, onNav, unreadNotifications = 0, isOpen, onClos
               className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg hover:bg-surface-container-high/50"
               title="Sign out"
             >
-              <AppIcon name="logout" className="text-on-surface-variant/60" size={16} />
+              <AppIcon name="logout" size={16} className="text-on-surface-variant/60" />
             </button>
           </div>
         </div>

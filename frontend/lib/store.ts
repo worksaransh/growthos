@@ -117,7 +117,7 @@ export const useGrowthOS = create<GrowthOSStore>()(
         activePage: "overview",
         dateRange: "30d",
         notificationsOpen: false,
-        unreadNotifications: 3,
+        unreadNotifications: 0,
       },
       setSidebarCollapsed: (collapsed) =>
         set((s) => ({ ui: { ...s.ui, sidebarCollapsed: collapsed } })),
@@ -140,42 +140,7 @@ export const useGrowthOS = create<GrowthOSStore>()(
         })),
 
       // Notifications
-      notifications: [
-        {
-          id: "1",
-          title: "ROAS Alert",
-          message: "Meta campaign ROAS dropped to 1.8x — below 2.5x threshold",
-          type: "warning",
-          read: false,
-          timestamp: new Date(Date.now() - 300000).toISOString(),
-          href: "#ads",
-        },
-        {
-          id: "2",
-          title: "Shopify Sync Complete",
-          message: "247 new orders synced from the last 24 hours",
-          type: "success",
-          read: false,
-          timestamp: new Date(Date.now() - 900000).toISOString(),
-        },
-        {
-          id: "3",
-          title: "Low Stock Warning",
-          message: "Product 'Mysore Sandal Soap 100g' — only 8 units left",
-          type: "warning",
-          read: false,
-          timestamp: new Date(Date.now() - 1800000).toISOString(),
-          href: "#products",
-        },
-        {
-          id: "4",
-          title: "New VIP Customer",
-          message: "Priya Sharma crossed ₹50,000 lifetime value milestone",
-          type: "info",
-          read: true,
-          timestamp: new Date(Date.now() - 3600000).toISOString(),
-        },
-      ],
+      notifications: [],
       addNotification: (n) =>
         set((s) => ({
           notifications: [n, ...s.notifications],

@@ -26,9 +26,9 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  // getUser() validates the JWT server-side (unlike getSession() which trusts cookie)
+  const { data: { user } } = await supabase.auth.getUser();
+  const session = user ? { user } : null;
 
-  return { supabase, session, response };
+  return { supabase, user, session, response };
 }

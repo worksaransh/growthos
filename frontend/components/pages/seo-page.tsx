@@ -79,7 +79,7 @@ export function SeoPage() {
     }).catch(() => {})
   }, [])
 
-  const hasData = connected || true // Shows mock UI until connected; real data surfaced via seoData state
+  const hasData = connected
 
   if (!hasData) return (
     <div className="p-4 lg:p-7 flex items-center justify-center min-h-96">

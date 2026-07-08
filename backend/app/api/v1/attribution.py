@@ -5,7 +5,7 @@ router = APIRouter(prefix="/attribution", tags=["attribution"])
 
 @router.get("/summary")
 async def get_attribution_summary(
-    model: str = Query(default="last_touch", regex="^(first_touch|last_touch|linear|data_driven)$"),
+    model: str = Query(default="last_touch", pattern="^(first_touch|last_touch|linear|data_driven)$"),
     start_date: str = "2026-06-01",
     end_date: str = "2026-06-30",
     workspace=Depends(get_current_workspace)
