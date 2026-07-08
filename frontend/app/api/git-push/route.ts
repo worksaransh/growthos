@@ -15,26 +15,38 @@ export async function POST() {
       results.push("Removed index.lock");
     }
 
-    // Remove test.txt from screenshots
-    const testFile = join(repoRoot, "docs", "screenshots", "test.txt");
-    if (existsSync(testFile)) {
-      unlinkSync(testFile);
-      results.push("Removed test.txt");
+    // Remove accidental test files
+    for (const f of [
+      join(repoRoot, "docs", "screenshots", "test.txt"),
+      join(repoRoot, "docs", "test.txt"),
+    ]) {
+      if (existsSync(f)) {
+        unlinkSync(f);
+        results.push("Removed " + f.split("\\").pop());
+      }
     }
 
-    // Git operations
     const opts = { cwd: repoRoot, encoding: "utf8" as const };
 
     const status = execSync("git status --short", opts);
     results.push("Status:\n" + status);
 
-    execSync("git add docs/screenshots/ README.md frontend/app/api/ frontend/public/html2canvas.min.js", opts);
+    // Stage everything relevant
+    execSync(
+      "git add docs/ README.md frontend/app/api/ frontend/public/html2canvas.min.js frontend/package.json frontend/package-lock.json",
+      opts
+    );
     results.push("git add done");
 
     const diff = execSync("git diff --cached --stat", opts);
     results.push("Staged:\n" + diff);
 
-    execSync('git commit -m "docs: add live screenshots + html2canvas + screenshot API"', opts);
+    if (!diff.trim()) {
+      results.push("Nothing to commit");
+      return NextResponse.json({ ok: true, results });
+    }
+
+    execSync('git commit -m "chore: update packages + cleanup"', opts);
     results.push("git commit done");
 
     const push = execSync("git push origin main", opts);
@@ -43,6 +55,9 @@ export async function POST() {
     return NextResponse.json({ ok: true, results });
   } catch (err: unknown) {
     const error = err as { message?: string; stderr?: string; stdout?: string };
-    return NextResponse.json({ ok: false, error: error.message, stderr: error.stderr, stdout: error.stdout, results }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: error.message, stderr: error.stderr, stdout: error.stdout, results },
+      { status: 500 }
+    );
   }
 }
