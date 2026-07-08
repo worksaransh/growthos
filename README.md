@@ -30,8 +30,6 @@
 ### Admin Dashboard
 ![Admin](docs/screenshots/admin.png)
 
-> **To add screenshots:** Take a screenshot of each page in your browser and save to `docs/screenshots/` with the filenames above, then commit and push.
-
 ---
 
 ## Features
